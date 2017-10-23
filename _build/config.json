@@ -1,0 +1,55 @@
+{
+    "name": "modDiscourseSSO",
+    "lowCaseName": "moddiscoursesso",
+    "description": "Single Sign On integration for Discourse forums.",
+    "author": "Murray Wood",
+    "version": "0.1.0",
+    "package":{
+        
+        
+        "menus": [],
+        
+        
+
+        "elements": {
+        
+            
+            "plugins": [],
+            
+        
+            
+            
+            "snippets": [{
+                "name":"discourse",
+                "file":"discourse.snippet.php"
+            }],
+            
+            
+        
+            
+            "chunks": [
+            
+            ]
+            
+        
+        },
+
+        "systemSettings": [{
+            "key": "secret"
+            ,"type": "textfield"
+            ,"area": "default"
+            ,"value": ""
+        },{
+            "key": "host"
+            ,"type": "textfield"
+            ,"area": "default"
+            ,"value": "discourse.example.com"
+        },{
+            "key": "scheme"
+            ,"type": "textfield"
+            ,"area": "default"
+            ,"value": "http"
+        }]
+    }
+    
+}

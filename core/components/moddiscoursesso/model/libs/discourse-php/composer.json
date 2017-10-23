@@ -1,0 +1,5 @@
+{
+    "require": {
+        "cviebrock/discourse-php": "^0.9.3"
+    }
+}
