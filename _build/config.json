@@ -3,7 +3,7 @@
     "lowCaseName": "moddiscoursesso",
     "description": "Single Sign On integration for Discourse forums.",
     "author": "Murray Wood",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "package":{
         
         
@@ -49,6 +49,11 @@
             ,"type": "textfield"
             ,"area": "default"
             ,"value": "http"
+        },{
+            "key": "login_page"
+            ,"type": "textfield"
+            ,"area": "default"
+            ,"value": "{site_start}"
         }]
     }
     

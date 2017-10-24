@@ -21,6 +21,7 @@ class modDiscourseSSO {
         $assetsPath = $this->getOption('assets_path', $options, $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH) . 'components/moddiscoursesso/');
         $assetsUrl = $this->getOption('assets_url', $options, $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/moddiscoursesso/');
 
+        // Instantiate the SSO Helper
         $this->ssoHelper = new Cviebrock\DiscoursePHP\SSOHelper();
 
         /* loads some default paths for easier management */
@@ -65,7 +66,7 @@ class modDiscourseSSO {
         return $option;
     }
 
-    public function authenticateUser() {
+    public function authenticateUser($loginPage) {
 
         $secret = $this->modx->getOption('moddiscoursesso.secret');
         $this->ssoHelper->setSecret( $secret );
@@ -74,20 +75,33 @@ class modDiscourseSSO {
         $payload = $_GET['sso'];
         $signature = $_GET['sig'];
 
+        // If param is an int, assume it's a resource ID and make the url.
+        if(filter_var($loginPage, FILTER_VALIDATE_INT) ){
+            $url = $this->modx->makeUrl($loginPage);
+        } else {
+            $url = $loginPage;
+        }
+
         // validate the payload
         if (!($this->ssoHelper->validatePayload($payload,$signature))) {
             // invalid, deny
             header("HTTP/1.1 403 Forbidden");
-            echo("Bad SSO request");
-            die();
+            echo("Bad request");
+            $this->modx->sendRedirect($url);
         }
 
         $nonce = $this->ssoHelper->getNonce($payload);
 
         $user = $this->modx->getUser();
         if (!$user) return '';
-        $profile = $user->getOne('Profile');
 
+        // If anonymous user, send to login page.
+        if (!$user->isAuthenticated($this->modx->context->key) && !$user->isAuthenticated('mgr')) {
+            $this->modx->sendRedirect($url);
+        }
+
+        // If authenticated, collect account info to send to discourse.
+        $profile = $user->getOne('Profile');
         if (!$profile) return '';
         $userId = $user->get('id');
         $userEmail = $profile->get('email');
